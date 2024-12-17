@@ -1567,7 +1567,7 @@ eipaab_wilkson_counts <- left_join(eipaab_counts, wilkson_counts, by = "compound
   dplyr::mutate(rank_detection_dif_order = 1:nrow(.))
 
 eipaab_wilkson_counts %>% 
-  dplyr::arrange(rank_detection_dif_order) %>% 
+  dplyr::arrange(desc(n_eipaab)) %>% 
   dplyr::slice(1:10) %>% 
   dplyr::mutate(compound_name = sentence_case(compound_name)) %>% 
   dplyr::select(compound_name, n_eipaab, n_postive_detection, rank_detection_dif_order) %>% 
