@@ -30,42 +30,65 @@ knit: |
 # README
 #########################
 
+
 **ARTICLE** <br>
-This R script is associated with Martin et al (2025) "Concentration Conundrum in Behavioural Ecotoxicology: on average the minimum doses tested in behavioural ecotoxicology are three hundred times higher then surface waters" 
+This R script is associated with **Martin et al (2025)** "Concentration Conundrum in Behavioural Ecotoxicology: the minimum doses tested in behavioural ecotoxicology are on average over three hundred times higher then surface waters" DOI:
+<br>
 
 **AUTHORS**<br>
-(1) Jake M Martin <br>
-(2) Jack A Band <br>
-(3) Erin S McCallum <br>
+Jake M. Martin <sup>1,2,3</sup>* <br>
+Jack A. Band <sup>2,4</sup> <br>
+Erin S. McCallum <sup>1</sup> 
+<br>
+
+**AFFILIATIONS**<br>
+(1) School of Life and Environmental Sciences, Deakin University, Geelong, Australia <br>
+(2) Department of Wildlife, Fish, and Environmental Studies, Swedish University of Agricultural Sciences, Umeå, Sweden <br>
+(3) School of Biological Sciences, Monash University, Melbourne, Australia <br>
+(4) Institute of Zoology, Zoological Society of London, London, United Kingdom <br>
+(*) Corresponding author 
+<br>
 
 **AIM** <br>
-The aim of this study, is to compare pharmaceuticals that have been tested in behavioural ecotoxicology studies to what have been detected in the environment, to identify whether tested concentrations reflect those that are detected in surface waters and waste water (i.e. effluent). In addition, we aimed to access if there is a general correlation between ecotoxicology testing frequency and environment occurrence data, and in doing so highlight compounds that require more focused testing.
+The aim of this study is two-fold: (1) to compare the target pharmaceuticals tested in behavioural ecotoxicology to what have been detected in the environment, highlighting potential targets for future investigation; (2) identify whether tested concentrations in behavioural ecotoxicology studies reflect those that are detected in surface waters and/or waste water.
+<br>
 
-**DATABASES** <br>
-For this study we used three open access databases to compare tested and observed pharmaceutical concentrations. <br>
 
-1) The Evidence of the Impacts of Pharmaceuticals on Aquatic Animal Behaviour (EIPAAB) database (Martin et al. 2024; DOI: https://doi.org/10.32942/X2NG9R) <br>
+**METHODS** <br>
+To achieve these aims, this study capitalises on four extensive open access databases, one of which focuses on peer-review research on the behavioural ecotoxicology of pharmaceuticals<sup>1</sup>, with the remaining three focusing on pharmaceutical environmental occurrence and concentrations<sup>2,3,4</sup>.<br>
 
-2) The Umwelt Bundesamt Pharmaceuticals in the environment (PHARMS-UBA) database (access link: https://www.umweltbundesamt.de/en/database-pharmaceuticals-in-the-environment-1) <br>
+(1) The Evidence of the Impacts of Pharmaceuticals on Aquatic Animal Behaviour (EIPAAB) database (Martin et al. 2024; DOI: https://doi.org/10.32942/X2NG9R) <br>
 
-3) the Wilkinson global river survey data (Wilkinson et al 2022: DOI: https://doi.org/10.1073/pnas.2113947119), specifically "Dataset S4. Database of pharmaceutical concentrations at all the sampling locations monitored in this project" <br>
+(2) The Umwelt Bundesamt Pharmaceuticals in the environment (PHARMS-UBA) database (access link: https://www.umweltbundesamt.de/en/database-pharmaceuticals-in-the-environment-1) <br>
 
-4) The NORMAN database <br>
+(3) the Wilkinson global river survey data (Wilkinson et al 2022: DOI: https://doi.org/10.1073/pnas.2113947119), specifically "Dataset S4. Database of pharmaceutical concentrations at all the sampling locations monitored in this project" <br>
 
+(4) The NORMAN database 
+<br>
+
+The four databases were filtered to focus on pharmaceuticals compounds, environmental samples from surface waters/waste water (e.g. rivers, streams, lakes, sea/oceans, ponds, waste water treatment plant [WWTP] effluent), and environmental/lab samples measured in units of mass per volume of water, where necessary. <br>
+
+**RESULTS**<br>
+Through the combination of these open access databases, we were able to compare the compounds and concentrations used in over **X** behavioural ecotoxicology exposures, to the environmental detection and concentrations of over **X** pharmaceuticals. In doing this, we detected a positive association with the number of behavioural ecotoxicology tests per compound and the total number of environmental detections, as well as the proportion of positive detections (i.e. relative number of samples above limit of detection). With that said, there was a number of compounds with high environmental detection, with no associated behavioural toxicological data, or very few examples. In terms of concentrations, on average, concentrations used in behavioural ecotoxicology were **309 times higher** then median surface water concentrations, and 12 times higher then those in effluent. <br>
 
 **SCRIPT** <br>
+This is an R markdown script written in R studio (2023.09.0+463 “Desert Sunflower” Release). The 'concentration-conundrum' git repository hosts this script, and if downloaded (or pulled) it will reproduce all data tidy/filter, analysis, and visualisations used in Martin et al (2025). The GitHub repository includes all raw input data from the four open access databases, as well as all output data and figures. I have tried to structure this code with Open, Reliable, and Transparent (ORT) coding practices in mind. Feel free to reach out if anything is unclear.
 
-The R sciprt first cleans and filters each database to make them comparable. It targets compounds and martixs of interest, in this case we are interested in any pharmaceuticals, in surface waters and in waste water effluent. <br>
+The R script first cleans and filters each databases to make them comparable. In terms of filtering, we target pharmaceutical compounds, surface waters/waste water effluent, and environmental/lab samples measured in units of mass per volume of water (e.g. ug/L). <br>
+
+GitHub: https://github.com/JakeMartinResearch/concentration-conundrum
 
 #########################
 # Contact
 #########################
 
-Jake M. Martin <br>
+**Jake M. Martin** <br>
 
-Email: jake.martin@deakin.edu.au (or jake.martin.research@gmail.com) <br>
+**Email**: jake.martin@deakin.edu.au (or jake.martin.research@gmail.com) <br>
 
-Web: jake.martin.org <br>
+**Web**: jake.martin.org <br>
+
+**GitHub**: https://github.com/JakeMartinResearch <br>
 
 #########################
 # Knit settings 
@@ -432,6 +455,10 @@ compounds <- wilkson_long %>%
 print(paste0("n samples = ", n_samples, "; n compound names = ", compounds))
 ```
 
+### Filtering
+
+We **do not need to filter** the Wilkson database, all analytes are pharmaceuticals, values are in mass per volume of water, and all samples are from surface waters.
+
 #####################
 # UBA-EIPAAB crossover
 ######################
@@ -485,7 +512,9 @@ print(paste0("n not in EIPAAB = ", UBA_not_in_EIPAAB))
 <br>
 Let's see which of these compounds were detected most often in UBA, and thus could be a key target for future analysis (Table 1). <br>
 
-**Table 1:** This is a summary of the most commonly detected compounds in the UBA database that are not in the EIPAAB database, with compound name (CAS number; where provided), number of positive detections, and the median and range of detected concentrations (not including non-detections)
+#### Table 1
+
+**Table 1:** This is a summary of the most commonly detected compounds in the UBA database (top 20) that are not in the EIPAAB database, with compound name (CAS number; where provided), number of positive detections, and the median and range of detected concentrations (not including non-detections)
 
 ```{r}
 UBA_not_in_eipaab_summary <- UBA_remaining_cas %>% 
@@ -797,6 +826,7 @@ Let's see if there is a correlation between the sample occurrence in UBA and EIP
 
 Here we make a summary data frame for each compound, **eipaab_uba_counts**, that includes the number of occurrences in each database, the rank occurrence, the number of detections in the UBA database, the proportion of positive detections in UBA, the rank order of detections, the relative rank order of environmental detections in UBA versus occurrence in EIPAAB (see Table 2). <br>
 
+#### Table 2
 **Table 2:** the 10 most common compounds in EIPAAB versus occurrence and detection frequency in UBA.
 
 ```{r}
@@ -879,7 +909,7 @@ postive_effect_estimate <- postive_cor_results$estimate
 postive_effect_p <- postive_cor_results$p.value
 ```
 
-
+##### Fig 1
 **Fig 1:** the relationship between the number of detections in the PHARMS-UBA database for environmental occurrence of pharmaceuticals (Surface waters, WWTP inflow/effluent, Treated/Untreated sewage, *only*), and the occurance in the Evidence of the Impacts of Pharmaceuticals on Aquatic Animal Behaviour (EIPAAB) database.
 
 ```{r}
@@ -1045,7 +1075,8 @@ eipaab_uba_with_sum <- eipaab_uba %>%
 
 For the 155 compounds in the EIPAAB database that had associated data in UBA (representing 1,440 exposures), only 7.53% and 25.68% employed test concentrations lower then median and upper 95% credible interval of surface water concentrations, respectively (Table 4). Further, only 11.77% and 29.79% employed test concentrations lower then median and upper 95% credible interval of wastewater treatment plant effluent (Table 4). On average, concentrations used in behavioural ecotoxicology were 309 times higher then median surf water concentrations, and 12 times higher then those in effluent. <br>
 
-**Table 4:** The number of exposures in the EIPAAB database that used concentrations less then median and upper 95% credible interval of surface water and effluent concentrations in the UBA database
+##### Table 3
+**Table 3:** The number of exposures in the EIPAAB database that used concentrations less then median and upper 95% credible interval of surface water and effluent concentrations in the UBA database
 
 ```{r}
 n_with_uba_data <- eipaab_uba_with_sum %>% 
@@ -1131,6 +1162,9 @@ eipaab_uba_under_levels <- eipaab_uba_with_sum %>%
   dplyr::mutate(across(everything(), ~ ifelse(is.nan(.), NA, .)))
 ```
 
+
+##### Fig 2a
+
 **Fig 2a.** The median difference in tested concentrations in EIPAAB and median surface water concentration in UBA (i.e. tested dose ÷ median surface water concentration)
 
 ```{r, fig.height=15, fig.width=5}
@@ -1166,7 +1200,7 @@ fig_2a <- eipaab_uba_under_levels %>%
     legend.justification = "center",  # Align legend to the left
   ) +
   labs(
-    subtitle = "Fig 2a. Tested concentrations vs median surfwater water",
+    subtitle = "Tested concentrations vs median surfwater water",
     x = "Log mean fold difference between tested and median surfwater water concentrations",
     y = "Compounds",
     size = "Data in EIPAAB",
@@ -1179,7 +1213,7 @@ fig_2a <- eipaab_uba_under_levels %>%
 
 fig_2a
 ```
-
+<br>
 ***Note:*** *the size and colour of the point represents the number of occurrences in EIPAAB* 
 
 <br>
@@ -1194,6 +1228,7 @@ ggsave(filename = paste0(output_fig_wd, "./figure-2a.pdf"),
 ```
 
 <br>
+##### Fig 2b
 **Fig 2b.** The median difference in tested concentrations in EIPAAB and median effluent concentration in UBA (i.e. tested dose ÷ median effluent concentration)
 
 ```{r, fig.height=15, fig.width=5}
@@ -1241,7 +1276,8 @@ fig_2b <- eipaab_uba_under_levels %>%
   ) 
 fig_2b
 ```
-***Note:*** *the size and colour of the point represents the number of occurrences in EIPAAB* 
+<br>
+***Note:*** *the size and colour of the point represents the number of occurrences in EIPAAB. The red line represents the median fold difference* 
 
 ```{r}
 ggsave(filename = paste0(output_fig_wd, "./figure-2b.pdf"), 
@@ -1384,7 +1420,11 @@ wilkson_in_eipaab <- wilkson_in_eipaab %>%
 
 ### Missing from EIPAAB
 
-What compounds are in Wilkson that are not in EIPAAB
+What compounds are in Wilkson that are not in EIPAAB <br>
+
+#### Table 4 
+
+**Table 4:** Compounds detected in the Wilkson *et al.* (2022) database that are not in the EIPAAB database, with compound name (CAS number), number of positive detections, and the median and range of detected concentrations (not including non-detections)
 
 ```{r}
 wilkson_not_in_eipaab <- wilkson_long %>% 
@@ -1411,20 +1451,44 @@ wilkson_not_in_eipaab_summary <- wilkson_not_in_eipaab %>%
 
 wilkson_not_in_eipaab_summary <- wilkson_not_in_eipaab %>% 
   dplyr::group_by(compound_name) %>% 
-  dplyr::reframe(n_smaples = length(value)) %>% 
+  dplyr::reframe(n_samples = length(value)) %>% 
   dplyr::left_join(., wilkson_not_in_eipaab_summary, by = "compound_name") %>% 
-  dplyr::mutate(prop_postive = n_postive_detection/n_smaples) %>% 
+  dplyr::mutate(prop_postive = n_postive_detection/n_samples) %>% 
   dplyr::left_join(., wilkson_not_in_eipaab_cas, by = "compound_name") %>%
-  dplyr::arrange(desc(prop_postive))
+  dplyr::arrange(desc(n_postive_detection))
+
+
+wilkson_not_in_eipaab_summary %>% 
+  dplyr::filter(n_postive_detection > 0) %>%
+  dplyr::mutate(name = paste0(sentence_case(compound_name), " (", compound_cas, ")"),
+                median_range = paste0(round(median, 4), " (", round(min,4), "–", round(max,4), ")")
+                )%>% 
+  dplyr::select(name, n_postive_detection, median_range) %>% 
+  dplyr::rename('Compound name (CAS number)' = name, 'Number of detections' = n_postive_detection, 'Median concentration with range (µg/L)' = median_range) %>% 
+  dplyr::arrange(desc("Number of detections")) %>% 
+  dplyr::slice(1:20) %>% 
+  gt() %>% 
+  tab_header(
+    title = "Wilkson et al. compounds not in EIPAAB",
+    subtitle = "Compounds detected in at least one site in Wilkson et al. (2022)"
+  ) %>% 
+  fmt_number(
+    columns = "Number of detections", 
+    decimals = 0
+  ) %>% 
+  cols_align(
+    align = "center", 
+    columns = everything()
+  )
 ```
 
 <br>
-Here we will highlight the compounds that have the highest detection frequency in Wilkson but are not yet in EIPAAB. This includes cotinine (CAS: 486-56-6; 386 detections), sitagliptin (CAS: 486460-32-6; 323 detections), hydrocodone (CAS: 125-29-1; 82 detections), fluconazole (CAS: 86386-73-4; 81 detections), pregabalin (CAS: 148553-50-8; 72 detections), nevirapine (CAS: 129618-40-2; 64 detections), triamterene (CAS: 396-01-0; 48 detections), salbutamol (CAS: 18559-94-9; 40 detections), loratadine (CAS: 79794-75-5; 21 detections), thiabendazole (CAS: 148-79-8; 17 detections)
+*Text summary* : Compounds that were detected in Wilkson but are in EIPAAB inculdes: Cotinine (CAS: 486-56-6; 386 detections), Sitagliptin (CAS: 486460-32-6; 323 detections), Hydrocodone (CAS: 125-29-1; 82 detections), Fluconazole (CAS: 86386-73-4; 81 detections), Pregabalin (CAS: 148553-50-8; 72 detections), Nevirapine (CAS: 129618-40-2; 64 detections), Triamterene (CAS: 396-01-0; 48 detections), Salbutamol (CAS: 18559-94-9; 40 detections), Loratadine (CAS: 79794-75-5; 21 detections), Thiabendazole (CAS: 148-79-8; 17 detections), Artemisinin (CAS: 63968-64-9; 8 detections), Oseltamivir (CAS: 196618-13-0; 4 detections), Itraconazole (CAS: 84625-61-6; 1 detections), Ketotifen (CAS: 34580-13-7; 1 detections)
 
 ```{r}
 wilkson_not_in_eipaab_summary %>% 
-  dplyr::slice(1:10) %>% 
-  dplyr::mutate(text_info = paste0(compound_name, " (CAS: ", compound_cas, "; ", n_postive_detection, " detections)")) %>% 
+  dplyr::filter(n_postive_detection > 0) %>% 
+  dplyr::mutate(text_info = paste0(sentence_case(compound_name), " (CAS: ", compound_cas, "; ", n_postive_detection, " detections)")) %>% 
   dplyr::pull(text_info) %>% 
   paste(collapse = ", ")
 ```
