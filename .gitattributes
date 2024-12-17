@@ -1,4 +1,4 @@
-* linguist-vendored
+index.html linguist-vendored
 *.Rproj linguist-vendored=false
 *.Rmd linguist-vendored=false
 *.Rproj linguist-language=R
