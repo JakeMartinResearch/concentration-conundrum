@@ -455,6 +455,7 @@ compounds <- wilkson_long %>%
 print(paste0("n samples = ", n_samples, "; n compound names = ", compounds))
 ```
 
+
 ### Filtering
 
 We **do not need to filter** the Wilkson database, all analytes are pharmaceuticals, values are in mass per volume of water, and all samples are from surface waters.
@@ -1496,14 +1497,85 @@ wilkson_not_in_eipaab_summary %>%
 
 ### EIPAAB_Wilkson
 
+This code makes a list of CAS and compound names from EIPAAB, which we will add to UBA, by filter the EIPAAB database for only compounds shared across both.
+
 ```{r}
-wilkson_in_eipaab
+name_filter <- wilkson_in_eipaab %>% 
+  tidyr::expand(nesting(compound_name)) %>% 
+  dplyr::distinct(compound_name) %>% 
+  pull(compound_name)
+
+EIPAAB_con_long_wilkson <- EIPAAB_con_long %>% 
+  dplyr::filter(compound_name %in% name_filter) %>% 
+  dplyr::mutate(n_units_est = n_units)
+```
+
+
+```{r}
+eipaab_wilkson <- wilkson_in_eipaab %>% 
+  dplyr::mutate(unique_row_id = paste0(sample_id, "_", compound_name),
+                concentration_type = "single",
+                matrix_group = "surfacewater",
+                n_units = 1,
+                source = "wilkson",
+                n_units_est = 1) %>%
+  dplyr::select(-sample_id, -survey_n, -site) %>% 
+  rbind(., EIPAAB_con_long_wilkson)
 ```
 
 ### Occurrence
 
-```{r}
-wilkson_in_eipaab
-```
+Let's see if there is a correlation between the sample occurrence in Wilson and EIPAAB, as well as the number of positive environmental detections in UBA and EIPAAB occurrence. <br>
 
+Here we make a summary data frame for each compound, **eipaab_uba_counts**, that includes the number of occurrences in each database, the rank occurrence, the number of detections in the UBA database, the proportion of positive detections in UBA, the rank order of detections, the relative rank order of environmental detections in UBA versus occurrence in EIPAAB (see Table 2). <br>
+
+#### Table 5
+**Table 5:** the 10 most common compounds in EIPAAB versus occurrence and detection frequency in Wilkson
+
+```{r}
+eipaab_counts <- eipaab_wilkson %>% 
+  dplyr::filter(source == "eipaab") %>% 
+  dplyr::group_by(compound_name) %>% 
+  dplyr::reframe(n_eipaab = sum(n_units_est, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  tidyr::complete(., compound_name)
+
+wilkson_counts <- eipaab_wilkson %>% 
+  dplyr::filter(source == "wilkson") %>% 
+  dplyr::group_by(compound_name) %>% 
+  dplyr::reframe(n_wilkson = sum(n_units_est, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  tidyr::complete(., compound_name)
+
+wilkson_counts_pos <- eipaab_wilkson %>% 
+  dplyr::filter(source == "wilkson") %>% 
+  dplyr::filter(value > 0) %>% 
+  dplyr::group_by(compound_name) %>% 
+  dplyr::reframe(n_postive_detection = length(unique_row_id)) %>% 
+  ungroup()
+
+eipaab_wilkson_counts <- left_join(eipaab_counts, wilkson_counts, by = "compound_name") %>% 
+  left_join(., wilkson_counts_pos, by = "compound_name") %>% 
+  dplyr::mutate(n_postive_detection = if_else(is.na(n_postive_detection), 0, n_postive_detection),
+                rank_detection_wilkson = rank(n_postive_detection, ties.method = "min"),
+                rank_eipaab = rank(n_eipaab, ties.method = "min"),
+                rank_detection_dif = rank_detection_wilkson-rank_eipaab,
+                log_n_detections_wilkson = if_else(n_postive_detection > 0, log(n_postive_detection), n_postive_detection),
+                log_n_eipaab = log(n_eipaab),
+                prop_postive = n_postive_detection/n_wilkson) %>% 
+  dplyr::arrange(desc(rank_detection_dif)) %>% 
+  dplyr::mutate(rank_detection_dif_order = 1:nrow(.))
+
+eipaab_wilkson_counts %>% 
+  dplyr::arrange(rank_detection_dif_order) %>% 
+  dplyr::slice(1:10) %>% 
+  dplyr::mutate(compound_name = sentence_case(compound_name)) %>% 
+  dplyr::select(compound_name, n_eipaab, n_postive_detection, rank_detection_dif_order) %>% 
+  dplyr::rename(Name = compound_name, "EIPAAB tests" = n_eipaab, "Detections" = n_postive_detection, "Rank order difference in detections and testing" = rank_detection_dif_order) %>% 
+  gt() %>% 
+  cols_align(
+    align = "center", 
+    columns = everything()
+  )
+```
 
